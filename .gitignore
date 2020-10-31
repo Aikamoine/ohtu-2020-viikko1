@@ -1,3 +1,4 @@
-.tmp
-build/
-.gradle/
+*.tmp
+/build
+/.gradle
+file.txt

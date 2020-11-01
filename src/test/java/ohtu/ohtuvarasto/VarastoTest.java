@@ -13,6 +13,7 @@ import static org.junit.Assert.*;
 public class VarastoTest {
 
     Varasto varasto;
+    Varasto virhevarasto;
     double vertailuTarkkuus = 0.0001;
 
     @Before
@@ -21,10 +22,65 @@ public class VarastoTest {
     }
 
     @Test
+    public void miinnustilavuusLuetaanOikein() {
+        virhevarasto = new Varasto(-10);
+        assertEquals(0, virhevarasto.getTilavuus(), vertailuTarkkuus);
+        virhevarasto = new Varasto(-10, 10);
+        assertEquals(0, virhevarasto.getTilavuus(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void miinussaldoLuetaanOikein() {
+        virhevarasto = new Varasto(10, -10);
+        assertEquals(0, virhevarasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void konstruktorinSaldoOikein() {
+        varasto = new Varasto(10, 8);
+        assertEquals(8, varasto.getSaldo(), vertailuTarkkuus);
+        varasto = new Varasto(10,10);
+        assertEquals(10, varasto.getSaldo(), vertailuTarkkuus);
+        varasto = new Varasto(8, 10);
+        assertEquals(8, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test
     public void konstruktoriLuoTyhjanVaraston() {
         assertEquals(0, varasto.getSaldo(), vertailuTarkkuus);
     }
+    
+    @Test
+    public void negatiivinenLisaysEiMuutaSaldoa() {
+        varasto.lisaaVarastoon(5);
+        varasto.lisaaVarastoon(-5);
+        assertEquals(5, varasto.getSaldo(), vertailuTarkkuus);
+    }
+    
+    @Test public void liikaLisaysMeneeMaksimiin() {
+        varasto.lisaaVarastoon(15);
+        assertEquals(10, varasto.getSaldo(), vertailuTarkkuus);
+    }
 
+    @Test
+    public void tekstiMuotoOnOikein() {
+        varasto.lisaaVarastoon(3);
+        assertEquals("saldo = 3.0, vielä tilaa 7.0", varasto.toString());
+    }
+    
+    @Test
+    public void negatiivinenOttoEiMuutaSaldoa() {
+        varasto.lisaaVarastoon(5);
+        assertEquals(0.0, varasto.otaVarastosta(-3), vertailuTarkkuus);
+    }
+    
+    @Test
+    public void isoOttoAntaaJaljellaOlevanMaaran() {
+        varasto.lisaaVarastoon(5);
+        assertEquals(5, varasto.otaVarastosta(100), vertailuTarkkuus);
+    }
+
+    
     @Test
     public void uudellaVarastollaOikeaTilavuus() {
         assertEquals(10, varasto.getTilavuus(), vertailuTarkkuus);

@@ -62,6 +62,7 @@ public class VarastoTest {
         assertEquals(10, varasto.getSaldo(), vertailuTarkkuus);
     }
 
+    //muutos
     @Test
     public void tekstiMuotoOnOikein() {
         varasto.lisaaVarastoon(3);
